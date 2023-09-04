@@ -17,28 +17,39 @@ function fetchForecastData(queryURL) {
             return response.json();
         })
         .then(data => {
+            console.log(data);
+            console.log("List length:", data.list.length);
+
             // Clear existing content in right-panel
             document.querySelector('.right-panel').innerHTML = '';
 
-            // Create a card for the weather data
-            let card = document.createElement('div');
-            card.className = 'weather-card';
+            for(let i = 4; i < data.list.length; i += 8) { 
+                let dailyData = data.list[i];
 
-            // Populate the card with weather data
-            let cityName = document.createElement('h2');
-            cityName.textContent = data.city.name;
-            card.appendChild(cityName);
+                // Create a card for the weather data
+                let card = document.createElement('div');
+                card.className = 'weather-card';
 
-            let temperature = document.createElement('p');
-            temperature.textContent = `Temperature: ${data.list[0].main.temp}°C`;  
-            card.appendChild(temperature);
+                // Populate the card with weather data
+                let cityName = document.createElement('h2');
+                cityName.textContent = data.city.name;
+                card.appendChild(cityName);
 
-            let description = document.createElement('p');
-            description.textContent = `Description: ${data.list[0].weather[0].description}`;  
-            card.appendChild(description);
+                let date = document.createElement('p');
+                date.textContent = dailyData.dt_txt; // This gives the date and time of the forecast
+                card.appendChild(date);
 
-            // Append the card to the right-panel
-            document.querySelector('.right-panel').appendChild(card);
+                let temperature = document.createElement('p');
+                temperature.textContent = `Temperature: ${dailyData.main.temp}°C`;  
+                card.appendChild(temperature);
+
+                let description = document.createElement('p');
+                description.textContent = `Description: ${dailyData.weather[0].description}`;  
+                card.appendChild(description);
+
+                // Append the card to the right-panel
+                document.querySelector('.right-panel').appendChild(card);
+            }
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error.message);
@@ -133,3 +144,5 @@ function removeCityFromPreviousSearches(city, divElement) {
         displayCityInPreviousSearches(city);
     });
 })();
+
+
