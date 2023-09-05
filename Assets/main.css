@@ -149,21 +149,21 @@ body {
   
   .weather-card.cloudy {
     background: linear-gradient(135deg, #e2ebe8, #69696b);
-    background-image: url(/Assets/images/png-transparent-cloud-weather-sunny-day-leaf-orange-computer-wallpaper-thumbnail.png), linear-gradient(135deg, #e2ebe8, #69696b);
+    background-image: url(./images/png-transparent-cloud-weather-sunny-day-leaf-orange-computer-wallpaper-thumbnail.png), linear-gradient(135deg, #e2ebe8, #69696b);
     background-repeat: no-repeat;
     background-position: right center;
   }
   
   .weather-card.rainy {
     background: linear-gradient(135deg, #847ecb, #201373);
-    background-image: url(/Assets/images/Rainy\ weather\ logo.png), linear-gradient(135deg, #847ecb, #201373);
+    background-image: url(./images/Rainy\ weather\ logo.png), linear-gradient(135deg, #847ecb, #201373);
     background-repeat: no-repeat;
     background-position: right center;
   }
   
   .weather-card.clear-sky {
     background: linear-gradient(135deg, #ffda00, #ff7f00);
-    background-image: url(/Assets/images/Sunny.png), linear-gradient(135deg, #ffda00, #ff7f00);
+    background-image: url(./images/Sunny.png), linear-gradient(135deg, #ffda00, #ff7f00);
     background-repeat: no-repeat;
     background-position: right center;
   }
