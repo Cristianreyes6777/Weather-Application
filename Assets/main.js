@@ -4,7 +4,7 @@ const APIKey = "50f758dfa696c286131b4730d3f8efba";
 let city = document.getElementById('search-bar').value; 
 
 function buildQueryURL(city) {
-    return `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${APIKey}`;
+    return `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${APIKey}`;
 }
 
 
