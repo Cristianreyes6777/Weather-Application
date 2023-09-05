@@ -1,9 +1,10 @@
 
+
 const APIKey = "50f758dfa696c286131b4730d3f8efba";
 let city = document.getElementById('search-bar').value; 
 
 function buildQueryURL(city) {
-    return `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${APIKey}`;
+    return `http://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${APIKey}`;
 }
 
 
@@ -25,6 +26,7 @@ function fetchForecastData(queryURL) {
 
             for(let i = 4; i < data.list.length; i += 8) { 
                 let dailyData = data.list[i];
+                
 
                 // Create a card for the weather data
                 let card = document.createElement('div');
@@ -35,26 +37,62 @@ function fetchForecastData(queryURL) {
                 cityName.textContent = data.city.name;
                 card.appendChild(cityName);
 
+                
+                let fullDateTime = dailyData.dt_txt;
+                let [year, month, day] = fullDateTime.split(' ')[0].split('-');
+                let formattedDate = `${month}/${day}/${year}`;
                 let date = document.createElement('p');
-                date.textContent = dailyData.dt_txt; // This gives the date and time of the forecast
+                date.textContent = formattedDate;
                 card.appendChild(date);
 
+
                 let temperature = document.createElement('p');
-                temperature.textContent = `Temperature: ${dailyData.main.temp}°C`;  
+                temperature.textContent = `Temperature: ${dailyData.main.temp}°F`;  
                 card.appendChild(temperature);
+
+                let windSpeed = dailyData.wind.speed;
+                let windSpeedElement = document.createElement('p');
+                windSpeedElement.textContent = `Wind Speed: ${windSpeed} MPH`;
+                card.appendChild(windSpeedElement);
+
+                let humidity = dailyData.main.humidity;
+                let humidityElement = document.createElement('p');
+                humidityElement.textContent = `Humidity: ${humidity}%`;
+                card.appendChild(humidityElement);
 
                 let description = document.createElement('p');
                 description.textContent = `Description: ${dailyData.weather[0].description}`;  
                 card.appendChild(description);
 
+                function getWeatherClass(description) {
+                    description = description.toLowerCase();
+
+                    if (description.includes('clouds')) {
+                        return 'cloudy';
+                    } else if (description.includes('rain')) {
+                        return 'rainy';
+                    } else if (description.includes('clear sky')) {
+                        return 'clear-sky';
+                    } else {
+                        return 'default'; // Default class
+                    }
+                }
+
+                let weatherClass = getWeatherClass(dailyData.weather[0].description);
+                card.classList.add(weatherClass);
+                
+
                 // Append the card to the right-panel
                 document.querySelector('.right-panel').appendChild(card);
+
+                
             }
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error.message);
         });
 }
+
 
 
 function storeCityInLocalStorage(city) {
