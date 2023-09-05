@@ -19,7 +19,7 @@ function fetchForecastData(queryURL) {
         })
         .then(data => {
             console.log(data);
-            console.log("List length:", data.list.length);
+            console.log("List length:", data.list.length); //console logging to trouble shoot issues
 
             // Clear existing content in right-panel
             document.querySelector('.right-panel').innerHTML = '';
@@ -37,7 +37,7 @@ function fetchForecastData(queryURL) {
                 cityName.textContent = data.city.name;
                 card.appendChild(cityName);
 
-                
+                //create date on MM/DD/YYYY format
                 let fullDateTime = dailyData.dt_txt;
                 let [year, month, day] = fullDateTime.split(' ')[0].split('-');
                 let formattedDate = `${month}/${day}/${year}`;
@@ -45,25 +45,29 @@ function fetchForecastData(queryURL) {
                 date.textContent = formattedDate;
                 card.appendChild(date);
 
-
+                // Populate the temperature portion
                 let temperature = document.createElement('p');
                 temperature.textContent = `Temperature: ${dailyData.main.temp}°F`;  
                 card.appendChild(temperature);
 
+                // populate wind speed data
                 let windSpeed = dailyData.wind.speed;
                 let windSpeedElement = document.createElement('p');
                 windSpeedElement.textContent = `Wind Speed: ${windSpeed} MPH`;
                 card.appendChild(windSpeedElement);
 
+                // populate humidity data 
                 let humidity = dailyData.main.humidity;
                 let humidityElement = document.createElement('p');
                 humidityElement.textContent = `Humidity: ${humidity}%`;
                 card.appendChild(humidityElement);
 
+                // incorporate description data
                 let description = document.createElement('p');
                 description.textContent = `Description: ${dailyData.weather[0].description}`;  
                 card.appendChild(description);
 
+                //create different css styles on the card depending on the description
                 function getWeatherClass(description) {
                     description = description.toLowerCase();
 
@@ -74,10 +78,11 @@ function fetchForecastData(queryURL) {
                     } else if (description.includes('clear sky')) {
                         return 'clear-sky';
                     } else {
-                        return 'default'; // Default class
+                        return 'default';
                     }
                 }
 
+                // create weather class so I can style it in CSS
                 let weatherClass = getWeatherClass(dailyData.weather[0].description);
                 card.classList.add(weatherClass);
                 
@@ -94,7 +99,7 @@ function fetchForecastData(queryURL) {
 }
 
 
-
+// local storage the las previous search
 function storeCityInLocalStorage(city) {
     let cities = JSON.parse(localStorage.getItem('cities')) || [];
     if (!cities.includes(city)) {
@@ -102,6 +107,8 @@ function storeCityInLocalStorage(city) {
         localStorage.setItem('cities', JSON.stringify(cities));
     }
 }
+
+// keep the last city that was searched for and add an x close our function
 
 function displayCityInPreviousSearches(city) {
     let div = document.createElement('div');
@@ -126,37 +133,36 @@ function displayCityInPreviousSearches(city) {
     document.querySelector('.previous-searches').appendChild(div);
 }
 
-// Search button click event listener
+// Search button click event listener and enter burron event listener
 document.getElementById('search-btn').addEventListener('click', function() {
     let city = document.getElementById('search-bar').value;
     if (city) {
         let queryURL = buildQueryURL(city);
         
-        // Fetch weather data and display it
+        
         fetchForecastData(queryURL);
         
-        // Store the city in local storage
+        
         storeCityInLocalStorage(city);
         
-        // Display the city in the previous searches section
+        
         displayCityInPreviousSearches(city);
     }
 });
 
-// Search bar "Enter" key event listener
+
 document.getElementById('search-bar').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         let city = document.getElementById('search-bar').value;
         if (city) {
             let queryURL = buildQueryURL(city);
             
-            // Fetch weather data and display it
+            
             fetchForecastData(queryURL);
             
-            // Store the city in local storage
             storeCityInLocalStorage(city);
             
-            // Display the city in the previous searches section
+            
             displayCityInPreviousSearches(city);
         }
     }
